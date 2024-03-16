@@ -10,9 +10,9 @@ def get_random_cafe():
     endpoint_url = endpoint + "/random"
     response = requests.get(url=endpoint_url)
     response.raise_for_status()
-    return response.json()
+    return response.json()['cafe']
 
-
+print(get_random_cafe())
 @app.route("/")
 def home():
     page_title = "Here goes the home page title"
