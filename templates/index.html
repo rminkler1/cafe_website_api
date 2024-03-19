@@ -1,16 +1,6 @@
 {% include "header.html" %}
 
-<!-- Title of page -->
-<div class="mb-5 mt-0 shadow-sm border-bottom">
-  <div class="p-5 text-center bg-body-tertiary" id="bgimg">
-    <div class="container py-5">
-      <h1 class="text-light">Discover your happy place</h1>
-      <p class="col-lg-8 mx-auto lead text-light">
-        Find the perfect cafe for you to work, relax, or just enjoy the brew.
-      </p>
-    </div>
-  </div>
-</div>
+
 
 <!-- Search for a cafe -->
   <div class="row my-5 p-3 shadow-sm border rounded text-center" >
@@ -24,14 +14,14 @@
 <div class="col-md-6">
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-success-emphasis">Featured Cafe</strong>
+          <strong class="d-inline-block mb-1 text-success-emphasis">Featured Cafe</strong>
           <h3 class="mb-0">{{ f_cafe.name }}</h3>
-          <div class="mb-1 text-body-secondary">{{ f_cafe.location }}</div>
-          <h5 class="card-text mb-auto">
-            {{ f_cafe.coffee_price }}
+          <div class="mb-auto text-body-secondary">{{ f_cafe.location }}</div>
+          <div class="mb-auto text-body-secondary">Seats: {{ f_cafe.seats }}</div>
+          <h5 class="card-text mb-1">
+            Coffee: {{ f_cafe.coffee_price }}
           </h5>
-
-          <p class="card-text mb-auto">
+          <div class="card-text mb-auto">
             <!-- wifi icon -->
             {% if f_cafe.has_wifi: %}
               <button type="button" class="btn btn-secondary">
@@ -76,8 +66,8 @@
               </svg>
             </button>
             {% endif %}
-          </p>
-          <a href="{{ f_cafe.map_url }}" class="icon-link gap-1 icon-link-hover stretched-link">
+          </div>
+          <a href="{{ f_cafe.map_url }}" class="icon-link gap-1 icon-link-hover stretched-link" target="cafe_map">
             View in Google Maps
           </a>
         </div>
@@ -89,14 +79,14 @@
     <div class="col-md-6">
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-success-emphasis">Random Cafe</strong>
+          <strong class="d-inline-block mb-1 text-success-emphasis">Random Cafe</strong>
           <h3 class="mb-0">{{ r_cafe.name }}</h3>
-          <div class="mb-1 text-body-secondary">{{ r_cafe.location }}</div>
-          <h5 class="card-text mb-auto">
-            {{ r_cafe.coffee_price }}
+          <div class="mb-auto text-body-secondary">{{ r_cafe.location }}</div>
+          <div class="mb-auto text-body-secondary">Seats: {{ r_cafe.seats }}</div>
+          <h5 class="mb-1 card-text">
+            Coffee: {{ r_cafe.coffee_price }}
           </h5>
-
-          <p class="card-text mb-auto">
+          <div class="card-text mb-auto">
             <!-- wifi icon -->
             {% if r_cafe.has_wifi: %}
               <button type="button" class="btn btn-secondary">
@@ -141,8 +131,8 @@
               </svg>
             </button>
             {% endif %}
-          </p>
-          <a href="{{ r_cafe.map_url }}" class="icon-link gap-1 icon-link-hover stretched-link">
+          </div>
+          <a href="{{ r_cafe.map_url }}" class="icon-link gap-1 icon-link-hover stretched-link" target="cafe_map">
             View in Google Maps
           </a>
         </div>
