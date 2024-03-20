@@ -133,8 +133,10 @@ def add():
         }
         r = requests.post(url=endpoint_url, data=parameters)
         r.raise_for_status()
+        cafe = parameters
+        cafe['title'] = "New Cafe"
         return render_template("add_success.html",
-                               gravatar_url=gravatar, name=parameters["name"], page_title=page_title)
+                               gravatar_url=gravatar, cafe=cafe, page_title=page_title)
 
     return render_template("add.html",
                            gravatar_url=gravatar, form=form, page_title=page_title, heading=heading, sub_heading=sub_heading)
