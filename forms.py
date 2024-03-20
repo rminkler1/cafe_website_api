@@ -7,9 +7,9 @@ from wtforms.validators import DataRequired, URL, Email
 class AddCafe(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     location = StringField("Location", validators=[DataRequired()])
-    img_url = StringField("Image URL", validators=[URL()])
-    map_url = StringField("Map URL", validators=[URL()])
-    coffee_price = StringField("Coffee Price")
+    img_url = StringField("Image URL", validators=[DataRequired(), URL()])
+    map_url = StringField("Map URL", validators=[DataRequired(), URL()])
+    coffee_price = StringField("Coffee Price", validators=[DataRequired()])
     has_wifi = BooleanField("WiFi")
     has_outlets = BooleanField("Outlets")
     has_toilet = BooleanField("Has Toilet")
