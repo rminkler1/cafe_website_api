@@ -92,11 +92,14 @@ def home():
     page_title = "Cafe Finder"
     rand_cafe = get_random_cafe()
     featured = get_featured_cafe()
+    featured['title'] = "Featured Cafe"
+    rand_cafe['title'] = "Random Cafe"
+    cafes = [featured, rand_cafe]
     gravatar = gravatar_url('email@example.com', size=32)
     heading = "Discover your happy place"
     sub_heading = "Find the perfect cafe for you to work, relax, or just enjoy the brew."
     return render_template("index.html", page_title=page_title, f_cafe=featured, r_cafe=rand_cafe,
-                           gravatar_url=gravatar, heading=heading, sub_heading=sub_heading)
+                           gravatar_url=gravatar, heading=heading, sub_heading=sub_heading, cafes=cafes)
 
 
 @app.route("/search")
