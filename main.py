@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from forms import AddCafe
 from flask_bootstrap import Bootstrap5
 from gravatar import gravatar_url
+from cafe_api import CafeApi
 
 # User Preferences
 endpoint = "http://127.0.0.1:5123"
@@ -19,6 +20,11 @@ app.config['SECRET_KEY'] = 'S4er8xDtpLa5YzB8BmgnbctSIuhtUEl31yUrIBkjJYxSkGLLmvjY
 Bootstrap5(app)
 app.jinja_env.globals.update(gravatar_url=gravatar_url)
 
+# initialize cafe api handler class
+cafe_api = CafeApi(endpoint)
+
+
+# TODO: Create user login
 
 # # configure flask login manager
 # login_manager = LoginManager()
@@ -48,26 +54,26 @@ app.jinja_env.globals.update(gravatar_url=gravatar_url)
 #     name: Mapped[str] = mapped_column(String(100))
 
 
-def get_random_cafe():
-    """
-    Return a random cafe
-    :return: Cafe as dictionary
-    """
-    endpoint_url = endpoint + "/random"
-    response = requests.get(url=endpoint_url)
-    response.raise_for_status()
-    return response.json()['cafe']
-
-
-def get_cafe_by_name(name):
-    """
-    Gets a cafe by name
-    :return: cafe as dictionary
-    """
-    endpoint_url = endpoint + "/get_by_name?name=" + name
-    response = requests.get(url=endpoint_url)
-    response.raise_for_status()
-    return response.json()['cafe']
+# def get_random_cafe():
+#     """
+#     Return a random cafe
+#     :return: Cafe as dictionary
+#     """
+#     endpoint_url = endpoint + "/random"
+#     response = requests.get(url=endpoint_url)
+#     response.raise_for_status()
+#     return response.json()['cafe']
+#
+#
+# def get_cafe_by_name(name):
+#     """
+#     Gets a cafe by name
+#     :return: cafe as dictionary
+#     """
+#     endpoint_url = endpoint + "/get_by_name?name=" + name
+#     response = requests.get(url=endpoint_url)
+#     response.raise_for_status()
+#     return response.json()['cafe']
 
 
 @app.route("/")
@@ -78,8 +84,8 @@ def home():
     sub_heading = "Find the perfect cafe for you to work, relax, or just enjoy the brew."
 
     # get cafes from database
-    rand_cafe = get_random_cafe()
-    featured = get_cafe_by_name(featured_cafe)
+    rand_cafe = cafe_api.get_random_cafe()
+    featured = cafe_api.get_cafe_by_name(featured_cafe)
     # add title to each cafe
     featured['title'] = "Featured Cafe"
     rand_cafe['title'] = "Random Cafe"
@@ -97,31 +103,30 @@ def search():
 
 @app.route("/add", methods=["POST", "GET"])
 def add():
+    # WT form
     form = AddCafe()
+
+    # Set page titles and headings
     page_title = "Add"
     heading = "Add a Cafe"
     sub_heading = "Share a great cafe with us."
-    # gravatar = gravatar_url('email@example.com', size=32)
 
     if form.validate_on_submit():
-        endpoint_url = endpoint + "/add"
+        parameters = cafe_api.add_cafe(
+            name=request.form.get('name'),
+            location=request.form.get('location'),
+            img_url=request.form.get('img_url'),
+            map_url=request.form.get('map_url'),
+            coffee_price=request.form.get('coffee_price'),
+            has_wifi=request.form.get('has_wifi'),
+            has_sockets=request.form.get('has_outlets'),
+            has_toilet=request.form.get('has_toilet'),
+            can_take_calls=request.form.get('can_take_calls'),
+            seats=request.form.get('seats'),
+        )
 
-        parameters = {
-            "name": request.form.get('name'),
-            "location": request.form.get('location'),
-            "img_url": request.form.get('img_url'),
-            "map_url": request.form.get('map_url'),
-            "coffee_price": request.form.get('coffee_price'),
-            "has_wifi": request.form.get('has_wifi'),
-            "has_sockets": request.form.get('has_outlets'),
-            "has_toilet": request.form.get('has_toilet'),
-            "can_take_calls": request.form.get('can_take_calls'),
-            "seats": request.form.get('seats'),
-        }
-        r = requests.post(url=endpoint_url, data=parameters)
-        r.raise_for_status()
         cafe = parameters
-        cafe['title'] = "New Cafe"
+        cafe['title'] = "New Cafe Added"
         return render_template("add_success.html", cafe=cafe, page_title=page_title)
 
     return render_template("add.html", form=form, page_title=page_title, heading=heading, sub_heading=sub_heading)
@@ -129,9 +134,20 @@ def add():
 
 @app.route("/edit")
 def edit():
+    # Set page titles and headings
     page_title = "Edit"
-    return render_template("edit.html", page_title=page_title)
+    heading = "Add a Cafe"
+    sub_heading = "Share a great cafe with us."
+    return render_template("edit.html", page_title=page_title, heading=heading, sub_heading=sub_heading)
 
+
+@app.route("/remove")
+def remove():
+    # Set page titles and headings
+    page_title = "Add"
+    heading = "Add a Cafe"
+    sub_heading = "Share a great cafe with us."
+    return render_template("index.html", page_title=page_title, heading=heading, sub_heading=sub_heading)
 
 if __name__ == '__main__':
     app.run(debug=True, port=1234)
