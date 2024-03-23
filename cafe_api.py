@@ -4,6 +4,7 @@ import requests
 class CafeApi:
     def __init__(self, endpoint):
         self.endpoint = endpoint
+        self.api_key = "secret_key"
 
     def get_random_cafe(self):
         """
@@ -46,4 +47,20 @@ class CafeApi:
         }
         r = requests.post(url=endpoint_url, data=parameters)
         r.raise_for_status()
+
+        # send new cafe id back with parameters
+        parameters['id'] = r.json()['response']['id']
         return parameters
+
+    def remove_cafe(self, cafe_id):
+        endpoint_url = f"{self.endpoint}/report_closed/{cafe_id}?api-key={self.api_key}"
+        response = requests.request("DELETE", endpoint_url)
+        return response.json()
+
+    def get_all(self):
+        endpoint_url = f"{self.endpoint}/all"
+        r = requests.request("GET", endpoint_url)
+        r.raise_for_status()
+        r = r.json()
+        cafes = r['cafe']
+        return cafes

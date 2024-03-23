@@ -54,9 +54,17 @@
               </button>
             {% endif %}
           </div>
-          <a href="{{ cafe.map_url }}" class="icon-link gap-1 icon-link-hover stretched-link" target="_blank">
-            View Map
-          </a>
+          <span>
+            <a class="pe-3" href="{{ cafe.map_url }}" target="_blank">
+              View Map
+            </a>
+            <a class="px-3" href="{{ url_for('edit', id=cafe.id) }}">
+              Edit Cafe
+            </a>
+            <a class="ps-3" href="{{ url_for('remove', id=cafe.id) }}">
+              Remove Cafe
+            </a>
+          </span>
         </div>
         <div class="col-auto d-none d-lg-block">
           <img class="bd-placeholder-img" style="object-fit: cover; width: 200px; height: 250px" width="200" height="250" src="{{ cafe.img_url }}" aria-label="Photo of the cafe" preserveAspectRatio="xMidYMid slice" focusable="false" />

@@ -13,7 +13,7 @@ from cafe_api import CafeApi
 
 # User Preferences
 endpoint = "http://127.0.0.1:5123"
-featured_cafe = ("Old Spike")
+featured_cafe = "Old Spike"
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'S4er8xDtpLa5YzB8BmgnbctSIuhtUEl31yUrIBkjJYxSkGLLmvjYVdc6zj3Q7NB'
@@ -86,11 +86,18 @@ def home():
     # get cafes from database
     rand_cafe = cafe_api.get_random_cafe()
     featured = cafe_api.get_cafe_by_name(featured_cafe)
+
+    # get new cafe if it matches the featured cafe
+    while rand_cafe['id'] == featured['id']:
+        rand_cafe = cafe_api.get_random_cafe()
+
     # add title to each cafe
     featured['title'] = "Featured Cafe"
     rand_cafe['title'] = "Random Cafe"
+
     # combine cafes into a list to send the web page for display
     cafes = [featured, rand_cafe]
+
     return render_template("index.html", page_title=page_title, f_cafe=featured, r_cafe=rand_cafe,
                            heading=heading, sub_heading=sub_heading, cafes=cafes)
 
@@ -141,13 +148,37 @@ def edit():
     return render_template("edit.html", page_title=page_title, heading=heading, sub_heading=sub_heading)
 
 
-@app.route("/remove")
+@app.route("/remove", methods=["GET"])
 def remove():
+    cafe_id = request.values.get('id')
+
+    # remove the cafe using the API
+    r = cafe_api.remove_cafe(cafe_id)
+
     # Set page titles and headings
-    page_title = "Add"
-    heading = "Add a Cafe"
-    sub_heading = "Share a great cafe with us."
+    page_title = "Report Closed"
+    heading = "Cafe Closed"
+
+    if not r.keys():
+        sub_heading = "API Connection error."
+    else:
+        for key in r.keys():
+            for inner_key in r[key].keys():
+                print(inner_key)
+                sub_heading = r[key][inner_key]
     return render_template("index.html", page_title=page_title, heading=heading, sub_heading=sub_heading)
+
+
+@app.route('/all')
+def show_all():
+    # Set page titles and headings
+    page_title = "All Cafes"
+    heading = "Show all Cafes"
+    sub_heading = "We are sure you'll find one you love."
+
+    cafes = cafe_api.get_all()
+    return render_template("index.html", page_title=page_title, heading=heading, sub_heading=sub_heading, cafes=cafes)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=1234)
