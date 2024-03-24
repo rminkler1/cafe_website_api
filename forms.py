@@ -11,11 +11,11 @@ class AddCafe(FlaskForm):
     map_url = StringField("Map URL", validators=[DataRequired(), URL()])
     coffee_price = StringField("Coffee Price", validators=[DataRequired()])
     has_wifi = BooleanField("WiFi")
-    has_outlets = BooleanField("Outlets")
+    has_sockets = BooleanField("Outlets")
     has_toilet = BooleanField("Has Toilet")
     can_take_calls = BooleanField("Can Take Calls")
     seats = StringField("Seats", validators=[DataRequired()])
-    submit = SubmitField("Submit Post")
+    submit = SubmitField("Submit Cafe")
 
 #
 #

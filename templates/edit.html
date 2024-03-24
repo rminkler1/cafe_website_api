@@ -1,2 +1,17 @@
+{% include "header.html" %}
 
-<!-- TODO: edit cafe entry -->
+
+<!-- show cafes -->
+  <div class="container">
+    <div class="row mb-2">
+
+      {% for cafe in cafes: %}
+
+      {% include "cafe_block.html" %}
+
+      {% endfor %}
+
+    </div>
+  </div>
+
+{% include "footer.html" %}

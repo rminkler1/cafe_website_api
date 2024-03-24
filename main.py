@@ -13,7 +13,7 @@ from cafe_api import CafeApi
 
 # User Preferences
 endpoint = "http://127.0.0.1:5123"
-featured_cafe = "Old Spike"
+featured_cafe = "Sally B's"
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'S4er8xDtpLa5YzB8BmgnbctSIuhtUEl31yUrIBkjJYxSkGLLmvjYVdc6zj3Q7NB'
@@ -126,7 +126,7 @@ def add():
             map_url=request.form.get('map_url'),
             coffee_price=request.form.get('coffee_price'),
             has_wifi=request.form.get('has_wifi'),
-            has_sockets=request.form.get('has_outlets'),
+            has_sockets=request.form.get('has_sockets'),
             has_toilet=request.form.get('has_toilet'),
             can_take_calls=request.form.get('can_take_calls'),
             seats=request.form.get('seats'),
@@ -139,13 +139,47 @@ def add():
     return render_template("add.html", form=form, page_title=page_title, heading=heading, sub_heading=sub_heading)
 
 
-@app.route("/edit")
+@app.route("/edit", methods=["GET", "POST"])
 def edit():
     # Set page titles and headings
     page_title = "Edit"
-    heading = "Add a Cafe"
-    sub_heading = "Share a great cafe with us."
-    return render_template("edit.html", page_title=page_title, heading=heading, sub_heading=sub_heading)
+    heading = "Edit a Cafe"
+    sub_heading = "Update a Cafe with the latest information."
+
+    cafe_id = request.values.get('id')
+
+    cafe = cafe_api.get_cafe_by_id(cafe_id)
+
+    edit_form = AddCafe(
+        name=cafe['name'],
+        location=cafe['location'],
+        img_url=cafe['img_url'],
+        map_url=cafe['map_url'],
+        coffee_price=cafe['coffee_price'],
+        has_wifi=cafe['has_wifi'],
+        has_sockets=cafe['has_sockets'],
+        has_toilet=cafe['has_toilet'],
+        can_take_calls=cafe['can_take_calls'],
+        seats=cafe['seats'],
+    )
+    if edit_form.validate_on_submit():
+        parameters = cafe_api.edit_cafe(
+            cafe_id=cafe_id,
+            name=request.form.get('name'),
+            location=request.form.get('location'),
+            img_url=request.form.get('img_url'),
+            map_url=request.form.get('map_url'),
+            coffee_price=request.form.get('coffee_price'),
+            has_wifi=request.form.get('has_wifi'),
+            has_sockets=request.form.get('has_sockets'),
+            has_toilet=request.form.get('has_toilet'),
+            can_take_calls=request.form.get('can_take_calls'),
+            seats=request.form.get('seats'),
+        )
+
+        parameters['title'] = "Edited Cafe"
+        return render_template('add_success.html', cafe=parameters)
+    return render_template("add.html", page_title=page_title, heading=heading, sub_heading=sub_heading, form=edit_form)
 
 
 @app.route("/remove", methods=["GET"])
@@ -164,7 +198,6 @@ def remove():
     else:
         for key in r.keys():
             for inner_key in r[key].keys():
-                print(inner_key)
                 sub_heading = r[key][inner_key]
     return render_template("index.html", page_title=page_title, heading=heading, sub_heading=sub_heading)
 
