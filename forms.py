@@ -17,6 +17,11 @@ class AddCafe(FlaskForm):
     seats = StringField("Seats", validators=[DataRequired()])
     submit = SubmitField("Submit Cafe")
 
+
+class CafeNameSearch(FlaskForm):
+    search = StringField("Search for a cafe by name")
+    submit = SubmitField("Search")
+
 #
 #
 # class RegisterForm(FlaskForm):

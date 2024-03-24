@@ -1,2 +1,17 @@
-
-<!-- TODO: search form and results -->
+<div>
+    <form class="form" method="get" action="{{ url_for('search') }}">
+        <div class="row py-1">
+            <div class="col text-end">Search by Cafe Name:</div>
+            <div class="col text-start"><input name="name"></div>
+        </div>
+        <div class="row py-1">
+            <div class="col text-end">Search by location:</div>
+            <div class="col text-start"><input name="loc"></div>
+        </div>
+        <div class="row py-1">
+            <div class="col">
+                <input class="btn btn-light btn-md" type="submit" value="Search">
+            </div>
+        </div>
+    </form>
+</div>

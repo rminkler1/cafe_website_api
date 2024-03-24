@@ -94,3 +94,19 @@ class CafeApi:
         r = r.json()
         cafes = r['cafe']
         return cafes
+
+    def search(self, name, loc):
+        endpoint_url = f"{self.endpoint}/search"
+        parameters = {}
+        if name:
+            parameters['name'] = name
+        if loc:
+            parameters['loc'] = loc
+        try:
+            r = requests.request("GET", url=endpoint_url, params=parameters)
+            r.raise_for_status()
+            r = r.json()
+            cafes = r['cafe']
+        except requests.exceptions.HTTPError:
+            cafes = {}
+        return cafes

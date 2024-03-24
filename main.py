@@ -6,7 +6,7 @@ from flask_login import UserMixin, login_user, LoginManager, current_user, logou
 from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text, ForeignKey
 from flask_sqlalchemy import SQLAlchemy
-from forms import AddCafe
+from forms import AddCafe, CafeNameSearch
 from flask_bootstrap import Bootstrap5
 from gravatar import gravatar_url
 from cafe_api import CafeApi
@@ -104,13 +104,22 @@ def home():
 
 @app.route("/search")
 def search():
-    page_title = "Search"
-    return render_template("search.html", page_title=page_title)
+    # Set page titles and headings
+    page_title = "Search Results"
+    heading = "Search Results"
+    sub_heading = "Here are some matches."
+
+    name = request.values.get('name')
+    loc = request.values.get('loc')
+
+    cafes = cafe_api.search(name, loc)
+    return render_template("index.html", page_title=page_title,
+                           heading=heading, sub_heading=sub_heading, cafes=cafes)
 
 
 @app.route("/add", methods=["POST", "GET"])
 def add():
-    # WT form
+    # WT forms
     form = AddCafe()
 
     # Set page titles and headings
