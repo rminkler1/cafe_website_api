@@ -26,22 +26,30 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a class="nav-link ps-4 pe-2 link-body-emphasis" href="{{ url_for('add') }}">Add a Cafe</a></li>
-          <li><a class="nav-link px-2 pe-2 link-body-emphasis" href="{{ url_for('show_all') }}">Show all Cafes</a></li>
-          <li><a class="nav-link px-2 link-body-emphasis" href="#">Register</a></li>
+          <!-- spacer -->
+          <li class="px-2"></li>
+
+          <li><a class="nav-link px-2 link-body-emphasis" href="{{ url_for('show_all') }}">Show all Cafes</a></li>
+
+          {% if current_user.is_authenticated: %}
+          <li><a class="nav-link px-2 link-body-emphasis" href="{{ url_for('add') }}">Add a Cafe</a></li>
+          {% endif %}
         </ul>
 
-<!--        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">-->
-<!--          <input aria-label="Search" class="form-control" placeholder="Search..." type="search">-->
-<!--        </form>-->
-
+        <!-- user dropdown -->
         <div class="dropdown text-end">
           <a aria-expanded="false" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" href="#">
-            <img alt="mdo" class="rounded-circle" height="32" src="{{ gravatar_url(email='email@example.com') }}" width="32">
+            <img alt="mdo" class="rounded-circle" height="32" src="{{ gravatar }}" width="32">
           </a>
           <ul class="dropdown-menu text-small">
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><a class="dropdown-item" href="#">Sign out</a></li>
+            {% if current_user.is_authenticated: %}
+            <li><a class="dropdown-item" href="#">{{ current_user.email }}</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sign out</a></li>
+            {% else: %}
+            <li><a class="dropdown-item" href="{{ url_for('register') }}">Register</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('login') }}">Log in</a></li>
+            {% endif %}
+
           </ul>
         </div>
       </div>

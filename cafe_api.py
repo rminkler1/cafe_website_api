@@ -1,10 +1,12 @@
+import os
+
 import requests
 
 
 class CafeApi:
     def __init__(self, endpoint):
         self.endpoint = endpoint
-        self.api_key = "secret_key"
+        self.api_key = os.environ.get('API_KEY')
 
     def get_random_cafe(self):
         """

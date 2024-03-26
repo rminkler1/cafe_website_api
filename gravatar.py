@@ -16,5 +16,6 @@ def gravatar_url(
     :param force_default: don't force default image
     :return: url
     """
+    print(email)
     hash_value = md5(email.lower().encode('utf-8')).hexdigest()
     return f"https://www.gravatar.com/avatar/{hash_value}?s={size}&d={default}&r={rating}&f={force_default}"

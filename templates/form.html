@@ -5,6 +5,14 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-4 col-sm-8">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                 <p class="text-danger">{{ message }}</p>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
             {{ render_form(form, novalidate=True, button_map={"submit": "light"}) }}
         </div>
     </div>

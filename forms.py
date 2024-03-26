@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField
-from wtforms.validators import DataRequired, URL, Email
+from wtforms.validators import DataRequired, URL, Email, EqualTo
 
 
 # WTForm for creating a blog post
@@ -18,23 +18,15 @@ class AddCafe(FlaskForm):
     submit = SubmitField("Submit Cafe")
 
 
-class CafeNameSearch(FlaskForm):
-    search = StringField("Search for a cafe by name")
-    submit = SubmitField("Search")
+class RegisterForm(FlaskForm):
+    email = StringField("Email", validators=[Email()])
+    name = StringField("Name", validators=[DataRequired()])
+    password1 = PasswordField("Password", validators=[DataRequired(), EqualTo('password2', 'Passwords Must Match')])
+    password2 = PasswordField("Password", validators=[DataRequired(), EqualTo('password1', 'Passwords Must Match')])
+    submit = SubmitField("Register")
 
-#
-#
-# class RegisterForm(FlaskForm):
-#     email = StringField("Email", validators=[Email()])
-#     name = StringField("Name", validators=[DataRequired()])
-#     password = PasswordField("Password", validators=[DataRequired()])
-#     submit = SubmitField("Register")
-#
-#
-# class LoginForm(FlaskForm):
-#     email = StringField("Email", validators=[Email()])
-#     password = PasswordField("Password", validators=[DataRequired()])
-#     submit = SubmitField("Log in")
-#
-#
-#
+
+class LoginForm(FlaskForm):
+    email = StringField("Email", validators=[Email()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    submit = SubmitField("Log in")
