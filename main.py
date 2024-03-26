@@ -1,3 +1,4 @@
+import os
 from functools import wraps
 
 from flask import Flask, render_template, request, flash, redirect, url_for, abort
@@ -7,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from werkzeug.security import generate_password_hash, check_password_hash
-import os
+
 from cafe_api import CafeApi
 from forms import *
 from gravatar import gravatar_url
